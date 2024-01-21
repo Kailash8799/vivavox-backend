@@ -49,7 +49,7 @@ const ProfileSchema = new mongoose.Schema({
         workout: { type: String },
     },
     premiumuser: { type: Boolean, default: false },
-    premiumtype: { type: String, default: "NONE" },
+    premiumtype: { type: String, default: "NONE",enum: ["NONE", "BASIC", "PRO"] },
     premiumenddate: { type: Date },
     premiumstartdate: { type: Date },
 }, { timestamps: true })

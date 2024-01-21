@@ -16,40 +16,7 @@ const UserSchema = new mongoose.Schema({
     },
     emailVerified: {
         type: Boolean,
-        default: true,
-    },
-    birthdate: {
-        type: Date,
-        default:null
-    },
-    gender: {
-        type: String,
-        default: "OTHER"
-    },
-    location: {
-        type: String,
-        default: "WORLD"
-    },
-    interest: {
-        type: String,
-        default: "ALL"
-    },
-    premiumuser: {
-        type: Boolean,
         default: false,
-    },
-    premiumtype: {
-        type: String,
-        default: "NONE",
-        enum: ["NONE", "BASIC", "PRO"]
-    },
-    premiumstartdate: {
-        type: Date,
-        default: null
-    },
-    premiumenddate: {
-        type: Date,
-        default: null
     },
 }, { timestamps: true })
 
