@@ -5,6 +5,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import sendMail from '../../middleware/email';
 import { verifyemail } from '../../constants/template/verifyemail';
 import CryptoJS from "crypto-js";
+import Profile from '../../models/Profile';
 const router = express.Router();
 
 router.post("/sendemail", async (req, res) => {
@@ -61,7 +62,7 @@ router.post("/verify", async (req, res) => {
             res.json({ success: false, message: "token not valid" });
             return;
         }
-        const { email } =  jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
+        const { email } = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
         if (email === undefined) {
             res.json({ success: false, message: "token not valid" });
             return;
@@ -75,8 +76,18 @@ router.post("/verify", async (req, res) => {
             res.json({ success: false, message: "Email already verified!" });
             return;
         }
+        const profile = new Profile({
+            userid: olduser?._id,
+            username: olduser?.username,
+            email: olduser?.email,
+        });
+        const profileres = await profile.save();
+        if (!profileres) {
+            res.json({ success: false, message: "Error while creating profile. Try agian!" }).status(401);
+            return;
+        }
         await User.findOneAndUpdate({ email: email }, { emailVerified: true });
-        res.json({ success: true, message: "Email verified!" }).status(401);
+        res.json({ success: true, message: "Email verified!" }).status(200);
         return;
     } catch (error) {
         console.log(error);

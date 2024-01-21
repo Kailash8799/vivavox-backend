@@ -3,6 +3,7 @@ import express from 'express'
 import User from '../../models/User';
 import CryptoJS from "crypto-js";
 import jwt from "jsonwebtoken";
+import Profile from '../../models/Profile';
 const router = express.Router();
 
 router.post("/", async (req, res) => {
@@ -12,7 +13,7 @@ router.post("/", async (req, res) => {
             return;
         }
         const { email, password } = req.body;
-        if (email === undefined || password === undefined) {
+        if (email === undefined || password === undefined || email === "" || password === "") {
             res.json({ success: false, message: "Invalid credentials" });
             return;
         }
@@ -31,10 +32,15 @@ router.post("/", async (req, res) => {
             res.json({ success: false, message: "Invalid credentials" });
             return;
         }
-        const token = jwt.sign({ name: olduser?.username, email: olduser?.email, gender: olduser?.gender, location: olduser?.location, premiumuser: olduser?.premiumuser, interest: olduser?.interest }, process.env.JWT_SECRET, { expiresIn: '10d', algorithm: "HS384" });
+        const profile = await Profile.findOne({ email: olduser?.email }).select('-__v').select('-createdAt').select("-updatedAt");
+        if (!profile || profile === null || profile === undefined) {
+            res.json({ success: false, message: "Some error occured! Try again" });
+            return;
+        }
+        const token = jwt.sign({ name: olduser?.username, email: olduser?.email }, process.env.JWT_SECRET, { expiresIn: '10d', algorithm: "HS384" });
 
-        res.json({token, success: true, message: "Login Successfull"});
-
+        res.json({ token, success: true, message: "Login Successfull", profile });
+        return;
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: "Some error occured!" }).status(401);

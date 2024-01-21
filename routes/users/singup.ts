@@ -14,8 +14,7 @@ router.post("/", async (req, res) => {
             return;
         }
         const { username, email, password } = req.body;
-
-        if (username === "" || email === "" || password === "") {
+        if (username === "" || email === "" || password === "" || username === undefined || email === undefined || password === undefined) {
             res.json({ success: false, message: "All fields are required!" });
             return;
         }
