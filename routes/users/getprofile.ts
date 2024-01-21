@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
             res.json({ success: false, message: "token not valid" });
             return;
         }
-        const userprofile = await Profile.findOne({ email });
+        const userprofile = await Profile.findOne({ email }).select('-__v').select('-createdAt').select("-updatedAt");
         if (!userprofile) {
             res.json({ success: false, message: "token is not valid" });
             return;
