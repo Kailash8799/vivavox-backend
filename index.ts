@@ -10,6 +10,7 @@ import verifyuserModule from './routes/users/verifyuser'
 import contactuserModule from './routes/users/contact'
 import editprofileModule from './routes/users/editprofile'
 import getprofileModule from './routes/users/getprofile'
+import getAllprofileModule from './routes/users/getallprofile'
 import welcomeModule from './routes/default/welcome'
 import connectDb from "./middleware/_db";
 
@@ -30,6 +31,7 @@ app.use("/v1/users/verifyemail", verifyuserModule);
 app.use("/v1/users/contact", contactuserModule);
 app.use("/v1/users/editprofile", editprofileModule);
 app.use("/v1/users/getprofile", getprofileModule);
+app.use("/v1/users/getallprofile", getAllprofileModule);
 
 server.listen(PORT, () => {
     console.log(`Server is ready ${PORT}`);
