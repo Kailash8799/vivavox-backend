@@ -20,12 +20,12 @@ router.post("/", async (req, res) => {
             res.json({ success: false, message: "Invalid session please logout and login again!" });
             return;
         }
-        const u = await Profile.updateMany({ email }, query);
+        const u = await Profile.findOneAndUpdate({ email }, query);
         if (!u) {
             res.json({ success: false, message: "Some error occured updating profile!" });
             return;
         }
-        res.json({ success: true, message: "Profile updated successfully" });
+        res.json({ success: true, message: "Profile updated successfully",profile:u }).status(200);
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: "Some error occured!" });
