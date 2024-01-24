@@ -5,5 +5,6 @@ export const queryUpdateData = async (profile: EditProfile) => {
     delete query.id;
     delete query.userid;
     delete query.email;
+    
     return query;
 }

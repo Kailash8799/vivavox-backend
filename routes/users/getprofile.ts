@@ -25,6 +25,7 @@ router.post("/", async (req, res) => {
             res.json({ success: false, message: "token is not valid" });
             return;
         }
+        console.log(userprofile);
         res.json({ success: true, message: "Profile",profile:userprofile }).status(200);
         return;
     } catch (error) {
