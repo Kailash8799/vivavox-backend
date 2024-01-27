@@ -9,7 +9,7 @@ const ProfileSchema = new mongoose.Schema({
     images: { type: Array, default: [] },
     username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    gender: { type: String, default: "NONE" },
+    gender: { type: String},
     location: { type: String },
     birthdate: { type: Date, default: null },
     language: { type: Array, default: [] },
