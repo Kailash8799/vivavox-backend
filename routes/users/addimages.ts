@@ -13,6 +13,7 @@ const DEFAULT_IMAGE = process.env.DEFAULT_IMAGE;
 
 
 const options: UploadApiOptions = {
+    folder: "vivavox/allimages",
     upload_preset: upload_preset,
     cloud_name: cloud_name,
     api_key: api_key,
@@ -30,6 +31,7 @@ async function deleteImage(imageurl: string, filedestination: string) {
         );
         return true;
     } catch (err) {
+        console.log(err);
         return false;
     }
 }
@@ -42,13 +44,13 @@ router.post("/", multer({ storage: multer.diskStorage({}) }).single("file"), asy
             return;
         }
         let file = req.file.path;
-        const { email, oldimage } = req.body;
+        const { email, oldimages } = req.body;
+        const images = JSON.parse(oldimages) as string[];
         if (email === undefined || email === null) {
             res.json({ success: false, message: "Invalid session please logout and try again!" });
             return;
         }
-
-        if(file === null || file === undefined){
+        if (file === null || file === undefined) {
             res.json({ success: false, message: "Invalid file try again!" });
             return;
         }
@@ -57,13 +59,13 @@ router.post("/", multer({ storage: multer.diskStorage({}) }).single("file"), asy
             res.json({ success: false, message: "Invalid session please logout and login again!" });
             return;
         }
-
-        if (oldimage !== DEFAULT_IMAGE && oldimage !== null && oldimage !== undefined && oldimage !== "null") {
-            await deleteImage(oldimage, "vivavox");
-        }
+        // if (oldimage !== DEFAULT_IMAGE && oldimage !== null && oldimage !== undefined && oldimage !== "null") {
+        //     await deleteImage(oldimage, "vivavox/allimages");
+        // }
         const result = await cloudinary.uploader.upload(file, options);
         if (result?.public_id !== null && result?.secure_url !== null && result?.secure_url !== undefined) {
-            const u = await Profile.findOneAndUpdate({ email }, { profileimage: result?.secure_url },
+            images.push(result?.secure_url)
+            const u = await Profile.findOneAndUpdate({ email }, { images: images },
                 { new: true }).select('-__v').select('-createdAt').select("-updatedAt");;
             if (!u) {
                 res.json({ success: false, message: "Some error occured updating profile!" });
@@ -82,6 +84,7 @@ router.post("/", multer({ storage: multer.diskStorage({}) }).single("file"), asy
         return;
     }
 })
+
 
 router.post("/delete", async (req, res) => {
     try {
@@ -105,13 +108,19 @@ router.post("/delete", async (req, res) => {
             return;
         }
         if (oldimage !== DEFAULT_IMAGE) {
-            const dres = await deleteImage(oldimage, "vivavox");
+            const dres = await deleteImage(oldimage, "vivavox/allimages");
             if (!dres) {
                 res.json({ success: false, message: "Error occurred while deleting image! Try agian!" });
                 return;
             }
         }
-        const u = await Profile.findOneAndUpdate({ email }, { profileimage: DEFAULT_IMAGE },
+        const images = olduser?.images as string[];
+        if (images.length < 1) {
+            res.json({ success: false, message: "Error occured!" });
+            return;
+        }
+        const img = images.filter(imgs => imgs !== oldimage);
+        const u = await Profile.findOneAndUpdate({ email }, { images: img },
             { new: true }).select('-__v').select('-createdAt').select("-updatedAt");;
         if (!u) {
             res.json({ success: false, message: "Error occurred while deleting image! Try agian!" });
