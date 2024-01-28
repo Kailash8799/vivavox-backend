@@ -20,7 +20,6 @@ router.post("/", async (req, res) => {
             res.json({ success: false, message: "Invalid session please logout and login again!" });
             return;
         }
-        console.log(olduser)
 
         const contact = new Contact({
             userId: olduser._id,

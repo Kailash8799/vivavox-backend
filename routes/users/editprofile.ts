@@ -4,8 +4,6 @@ import Profile from '../../models/Profile';
 import { queryUpdateData } from '../../constants/methods/queryupdatedata';
 const router = express.Router();
 
-const JWT_SECRET = process.env.JWT_SECRET
-
 router.post("/", async (req, res) => {
     try {
         if (req.method !== "POST") {
@@ -21,7 +19,7 @@ router.post("/", async (req, res) => {
         }
         const u = await Profile.findOneAndUpdate({ email }, query, {
             new: true,
-        });
+        }).select('-__v').select('-createdAt').select("-updatedAt");
         if (!u) {
             res.json({ success: false, message: "Some error occured updating profile!" });
             return;

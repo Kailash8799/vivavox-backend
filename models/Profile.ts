@@ -1,15 +1,18 @@
+require('dotenv').config();
 import mongoose from "mongoose";
+
+const DEFAULT_IMAGE = process.env.DEFAULT_IMAGE;
 
 const ProfileSchema = new mongoose.Schema({
     userid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
-    profileimage: { type: String, },
+    profileimage: { type: String, default: DEFAULT_IMAGE },
     images: { type: Array, default: [] },
     username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    gender: { type: String},
+    gender: { type: String },
     location: { type: String },
     birthdate: { type: Date, default: null },
     language: { type: Array, default: [] },
