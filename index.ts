@@ -14,6 +14,7 @@ import getAllprofileModule from './routes/users/getallprofile'
 import updateprofileimageModule from './routes/users/uploadimage'
 import uploadimageModule from './routes/users/addimages'
 import likedislikeModule from './routes/users/likedislike'
+import chatroomModule from './routes/users/chat'
 import welcomeModule from './routes/default/welcome'
 import connectDb from "./middleware/_db";
 
@@ -38,6 +39,7 @@ app.use("/v1/users/getallprofile", getAllprofileModule);
 app.use("/v1/users/updateprofileimage", updateprofileimageModule);
 app.use("/v1/users/uploadimage", uploadimageModule);
 app.use("/v1/users/likedislike", likedislikeModule);
+app.use("/v1/users/chatroom", chatroomModule);
 
 server.listen(PORT, () => {
     console.log(`Server is ready ${PORT}`);
