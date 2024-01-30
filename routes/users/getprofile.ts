@@ -20,12 +20,20 @@ router.post("/", async (req, res) => {
             res.json({ success: false, message: "token not valid" });
             return;
         }
-        const userprofile = await Profile.findOne({ email }).select('-__v').select('-createdAt').select("-updatedAt");
+        const userprofile = await Profile.findOne({ email }).select('-__v').select('-createdAt').select("-updatedAt").populate({
+            path: 'likes.user',
+            model: 'Profile', // Replace with the actual name of your Profile model
+        }).populate({
+            path: 'remotelikes.user',
+            model: 'Profile', // Replace with the actual name of your Profile model
+        });
+
         if (!userprofile) {
             res.json({ success: false, message: "token is not valid" });
             return;
         }
-        res.json({ success: true, message: "Profile",profile:userprofile }).status(200);
+
+        res.json({ success: true, message: "Profile", profile: userprofile }).status(200);
         return;
     } catch (error) {
         console.log(error);
