@@ -9,14 +9,13 @@ router.post("/", async (req, res) => {
             res.json({ success: false, message: "Some error occured!" });
             return;
         }
-        const userprofiles = await Profile.find({ $and: [{ email: { $ne: req.body.email } }, { _id: { $nin: req.body.allswipe } }] }).select('-__v -createdAt -updatedAt');
-        // .populate({
-            // path: 'likes.user',
-            // model: 'Profile',
-        // }).populate({
-            // path: 'remotelikes.user',
-            // model: 'Profile',
-        // });
+        const userprofiles = await Profile.find({ $and: [{ email: { $ne: req.body.email } }, { _id: { $nin: req.body.allswipe } }] }).select('-__v -createdAt -updatedAt').populate({
+            path: 'likes.user',
+            model: 'Profile',
+        }).populate({
+            path: 'remotelikes.user',
+            model: 'Profile',
+        });
 
         if (!userprofiles) {
             res.json({ success: false, message: "token is not valid" });
