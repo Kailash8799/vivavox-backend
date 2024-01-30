@@ -22,10 +22,12 @@ router.post("/", async (req, res) => {
         }
         const userprofile = await Profile.findOne({ email }).select('-__v').select('-createdAt').select("-updatedAt").populate({
             path: 'likes.user',
-            model: 'Profile', // Replace with the actual name of your Profile model
+            model: 'Profile', 
+            select:'_id profileimage username email premiumuser',
         }).populate({
             path: 'remotelikes.user',
-            model: 'Profile', // Replace with the actual name of your Profile model
+            model: 'Profile', 
+            select:'_id profileimage username email premiumuser',
         });
 
         if (!userprofile) {

@@ -12,9 +12,11 @@ router.post("/", async (req, res) => {
         const userprofiles = await Profile.find({ $and: [{ email: { $ne: req.body.email } }, { _id: { $nin: req.body.allswipe } }] }).select('-__v -createdAt -updatedAt').populate({
             path: 'likes.user',
             model: 'Profile',
+            select:'_id profileimage username email premiumuser',
         }).populate({
             path: 'remotelikes.user',
-            model: 'Profile',
+            model: 'Profile', 
+            select:'_id profileimage username email premiumuser',
         });
 
         if (!userprofiles) {

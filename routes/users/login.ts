@@ -32,7 +32,13 @@ router.post("/", async (req, res) => {
             res.json({ success: false, message: "Invalid credentials" });
             return;
         }
-        const profile = await Profile.findOne({ email: olduser?.email }).select('-__v').select('-createdAt').select("-updatedAt");
+        const profile = await Profile.findOne({ email: olduser?.email }).select('-__v').select('-createdAt').select("-updatedAt").populate({
+            path: 'likes.user',
+            model: 'Profile', // Replace with the actual name of your Profile model
+        }).populate({
+            path: 'remotelikes.user',
+            model: 'Profile', // Replace with the actual name of your Profile model
+        });
         if (!profile || profile === null || profile === undefined) {
             res.json({ success: false, message: "Some error occured! Try again" });
             return;
