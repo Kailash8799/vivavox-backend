@@ -8,6 +8,30 @@ const ProfileSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
+    likes: [{
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Profile',
+        },
+        isSuperlike: {
+            type: Boolean,
+            default: false,
+        }
+    }],
+    remotelikes: [{
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Profile',
+        },
+        isSuperlike: {
+            type: Boolean,
+            default: false,
+        }
+    }],
+    allswipe: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Profile',
+    }],
     profileimage: { type: String, default: DEFAULT_IMAGE },
     images: { type: Array, default: [] },
     username: { type: String, required: true },

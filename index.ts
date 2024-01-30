@@ -13,6 +13,7 @@ import getprofileModule from './routes/users/getprofile'
 import getAllprofileModule from './routes/users/getallprofile'
 import updateprofileimageModule from './routes/users/uploadimage'
 import uploadimageModule from './routes/users/addimages'
+import likedislikeModule from './routes/users/likedislike'
 import welcomeModule from './routes/default/welcome'
 import connectDb from "./middleware/_db";
 
@@ -36,6 +37,7 @@ app.use("/v1/users/getprofile", getprofileModule);
 app.use("/v1/users/getallprofile", getAllprofileModule);
 app.use("/v1/users/updateprofileimage", updateprofileimageModule);
 app.use("/v1/users/uploadimage", uploadimageModule);
+app.use("/v1/users/likedislike", likedislikeModule);
 
 server.listen(PORT, () => {
     console.log(`Server is ready ${PORT}`);
