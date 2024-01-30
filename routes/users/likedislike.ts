@@ -112,7 +112,15 @@ router.post("/dislike", async (req, res) => {
 
         const u = await Profile.findOneAndUpdate({ email }, query, {
             new: true,
-        }).select('-__v').select('-createdAt').select("-updatedAt");
+        }).select('-__v').select('-createdAt').select("-updatedAt").populate({
+            path: 'likes.user',
+            model: 'Profile',
+            select: '_id profileimage username email premiumuser',
+        }).populate({
+            path: 'remotelikes.user',
+            model: 'Profile',
+            select: '_id profileimage username email premiumuser',
+        });;
 
         if (!u) {
             res.json({ success: false, message: "Some error occured updating profile!" });

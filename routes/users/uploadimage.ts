@@ -48,7 +48,7 @@ router.post("/", multer({ storage: multer.diskStorage({}) }).single("file"), asy
             return;
         }
 
-        if(file === null || file === undefined){
+        if (file === null || file === undefined) {
             res.json({ success: false, message: "Invalid file try again!" });
             return;
         }
@@ -64,7 +64,15 @@ router.post("/", multer({ storage: multer.diskStorage({}) }).single("file"), asy
         const result = await cloudinary.uploader.upload(file, options);
         if (result?.public_id !== null && result?.secure_url !== null && result?.secure_url !== undefined) {
             const u = await Profile.findOneAndUpdate({ email }, { profileimage: result?.secure_url },
-                { new: true }).select('-__v').select('-createdAt').select("-updatedAt");;
+                { new: true }).select('-__v').select('-createdAt').select("-updatedAt").populate({
+                    path: 'likes.user',
+                    model: 'Profile',
+                    select: '_id profileimage username email premiumuser',
+                }).populate({
+                    path: 'remotelikes.user',
+                    model: 'Profile',
+                    select: '_id profileimage username email premiumuser',
+                });;
             if (!u) {
                 res.json({ success: false, message: "Some error occured updating profile!" });
                 return;
@@ -112,7 +120,15 @@ router.post("/delete", async (req, res) => {
             }
         }
         const u = await Profile.findOneAndUpdate({ email }, { profileimage: DEFAULT_IMAGE },
-            { new: true }).select('-__v').select('-createdAt').select("-updatedAt");;
+            { new: true }).select('-__v').select('-createdAt').select("-updatedAt").populate({
+                path: 'likes.user',
+                model: 'Profile',
+                select:'_id profileimage username email premiumuser',
+            }).populate({
+                path: 'remotelikes.user',
+                model: 'Profile', 
+                select:'_id profileimage username email premiumuser',
+            });;
         if (!u) {
             res.json({ success: false, message: "Error occurred while deleting image! Try agian!" });
             return;

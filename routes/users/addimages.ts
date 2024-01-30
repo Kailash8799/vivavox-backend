@@ -67,7 +67,15 @@ router.post("/", multer({ storage: multer.diskStorage({}) }).single("file"), asy
         if (result?.public_id !== null && result?.secure_url !== null && result?.secure_url !== undefined) {
             images.push(result?.secure_url)
             const u = await Profile.findOneAndUpdate({ email }, { images: images },
-                { new: true }).select('-__v').select('-createdAt').select("-updatedAt");;
+                { new: true }).select('-__v').select('-createdAt').select("-updatedAt").populate({
+                    path: 'likes.user',
+                    model: 'Profile',
+                    select: '_id profileimage username email premiumuser',
+                }).populate({
+                    path: 'remotelikes.user',
+                    model: 'Profile',
+                    select: '_id profileimage username email premiumuser',
+                });;
             if (!u) {
                 res.json({ success: false, message: "Some error occured updating profile!" });
                 return;
@@ -122,7 +130,15 @@ router.post("/delete", async (req, res) => {
         }
         const img = images.filter(imgs => imgs !== oldimage);
         const u = await Profile.findOneAndUpdate({ email }, { images: img },
-            { new: true }).select('-__v').select('-createdAt').select("-updatedAt");;
+            { new: true }).select('-__v').select('-createdAt').select("-updatedAt").populate({
+                path: 'likes.user',
+                model: 'Profile',
+                select: '_id profileimage username email premiumuser',
+            }).populate({
+                path: 'remotelikes.user',
+                model: 'Profile',
+                select: '_id profileimage username email premiumuser',
+            });;
         if (!u) {
             res.json({ success: false, message: "Error occurred while deleting image! Try agian!" });
             return;
