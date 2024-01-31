@@ -44,7 +44,6 @@ router.post("/", multer({ storage: multer.diskStorage({}) }).single("file"), asy
             return;
         }
         let file = req.file.path;
-        console.log(file);
         const { email, oldimages } = req.body;
         const images = JSON.parse(oldimages) as string[];
         if (email === undefined || email === null) {

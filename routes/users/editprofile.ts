@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
             path: 'remotelikes.user',
             model: 'Profile', 
             select:'_id profileimage username email premiumuser',
-        });;
+        });
         if (!u) {
             res.json({ success: false, message: "Some error occured updating profile!" });
             return;
