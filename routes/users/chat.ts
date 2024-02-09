@@ -122,7 +122,6 @@ router.post("/getallmessage", async (req, res) => {
             return;
         }
         const { chatid } = req.body;
-        console.log(chatid)
 
         const allmessage = await Message.find({ chat: chatid }).sort({ createdAt: -1 });
 

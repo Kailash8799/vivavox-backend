@@ -2,6 +2,7 @@ require('dotenv').config()
 import express from "express";
 import cors from 'cors'
 import { createServer } from 'http'
+import { Server } from 'socket.io';
 import bodyParser from 'body-parser';
 import loginModule from './routes/users/login'
 import signupModule from './routes/users/singup'
@@ -21,6 +22,9 @@ import connectDb from "./middleware/_db";
 const PORT = process.env.PORT || 5500;
 const app = express();
 const server = createServer(app);
+const io = new Server(server
+    // , { pingInterval: 60000, cors: { origin: "*" } }
+);
 
 connectDb();
 
@@ -40,6 +44,19 @@ app.use("/v1/users/updateprofileimage", updateprofileimageModule);
 app.use("/v1/users/uploadimage", uploadimageModule);
 app.use("/v1/users/likedislike", likedislikeModule);
 app.use("/v1/users/chatroom", chatroomModule);
+
+io.on("connection", (socket) => {
+    socket.on("join room", (roomId: string) => {
+        socket.join(roomId);
+    })
+
+    socket.on("new message", (data) => {
+        socket.to(data.roomId).emit("new message",data.message);
+    });
+    socket.on("disconnect", () => {
+        console.log(socket.id + " disconected");
+    })
+});
 
 server.listen(PORT, () => {
     console.log(`Server is ready ${PORT}`);
