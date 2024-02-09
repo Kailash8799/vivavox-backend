@@ -51,7 +51,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on("new message", (data) => {
-        socket.to(data.roomId).emit("new message",data.message);
+        socket.broadcast.to(data.roomId).emit("new message",data.message);
     });
     socket.on("disconnect", () => {
         console.log(socket.id + " disconected");
