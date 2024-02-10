@@ -36,8 +36,23 @@ router.post("/createchat", async (req, res) => {
             userid: olduser._id,
             remoteuser: remoteuser._id
         });
+
+        const chat = await Chat.find({ $or: [{ userid: olduser._id }, { remoteuser: olduser._id }] }).select('-__v').select('-createdAt').select("-updatedAt").populate({
+            path: 'userid',
+            model: 'Profile',
+            select: '_id profileimage username email premiumuser',
+        }).populate({
+            path: 'remoteuser',
+            model: 'Profile',
+            select: '_id profileimage username email premiumuser',
+        }).populate({
+            path: 'latestMessage',
+            model: 'Message',
+            select: '_id chat sender message createdAt',
+        });
+
         if (newchat) {
-            res.json({ success: true, message: "Chat created" }).status(200);
+            res.json({ success: true, message: "Chat created", allchat: chat }).status(200);
             return;
         }
         res.json({ success: false, message: "Some error while creating chat" }).status(200);
@@ -106,6 +121,8 @@ router.post("/getallchat", async (req, res) => {
             model: 'Message',
             select: '_id chat sender message createdAt',
         });
+
+
 
         res.json({ success: true, message: "Chat fetched successfully", allchat: chatexist }).status(200);
         return;
