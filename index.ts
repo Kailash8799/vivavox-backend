@@ -46,13 +46,14 @@ app.use("/v1/users/likedislike", likedislikeModule);
 app.use("/v1/users/chatroom", chatroomModule);
 
 io.on("connection", (socket) => {
+    console.log("user joined to socket successfully")
     socket.on("join room", (roomId: string) => {
         socket.join(roomId);
     })
 
     socket.on("new message", (data) => {
         console.log(data.roomId)
-        io.to(data.roomId).emit("new message", data.message);
+        socket.broadcast.to(data.roomId).emit("new message", data.message);
     });
     socket.on("disconnect", () => {
         console.log(socket.id + " disconected");
