@@ -8,8 +8,7 @@
     "build":"tsc -p .",
     "server":"nodemon index.ts",
     "ts.check": "tsc --project tsconfig.json",
-    "add-build": "git add dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "add-build": "git add dist"
   },
   "author": "kailash rajput",
   "license": "ISC",
