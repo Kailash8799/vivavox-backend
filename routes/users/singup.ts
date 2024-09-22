@@ -37,9 +37,9 @@ router.post("/", async (req, res) => {
         const token = jwt.sign({ username, email }, process.env.JWT_SECRET, { expiresIn: '1h', algorithm: "HS384" });
         const htmlemail = await verifyemail(token);
         const email_responce = await sendMail({ htmlemail: htmlemail, subject: "Account Verification", to_email: email })
+        res.json({ success: true, message: email_responce });
+        return;
         if (email_responce) {
-            res.json({ success: true, message: "Verification email sent successfully" });
-            return;
         } else {
             await User.deleteOne({ email: email });
             res.json({ success: false, message: "Some error occured while creating account!" });

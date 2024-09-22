@@ -5,7 +5,6 @@ import { SendMailProps } from '../constants/props/email';
 const sendMail = async ({ to_email, htmlemail, subject }: SendMailProps) => {
 
     try {
-        console.log(process.env.EMAIL);
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 465,
@@ -55,10 +54,10 @@ const sendMail = async ({ to_email, htmlemail, subject }: SendMailProps) => {
         // return true;
         try {
             await transporter.sendMail(mailOptions);
-            return true;
+            return "";
         } catch (error) {
-            console.error("Error sending verification email:", error);
-            return false;
+            console.log("Error sending verification email:", error);
+            return error;
         }
 
 
