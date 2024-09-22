@@ -61,5 +61,6 @@ io.on("connection", (socket) => {
 });
 
 server.listen(PORT, () => {
+    console.log(`Server is ready ${PORT} at ${process.env.EMAIL} and ${process.env.EMAIL_PASSWORD}`);
     console.log(`Server is ready ${PORT}`);
 })

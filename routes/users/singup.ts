@@ -9,10 +9,6 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
     try {
-        if (req.method !== "POST") {
-            res.json({ success: false, message: "Some error occured!" });
-            return;
-        }
         const { username, email, password } = req.body;
         if (username === "" || email === "" || password === "" || username === undefined || email === undefined || password === undefined) {
             res.json({ success: false, message: "All fields are required!" });
@@ -35,9 +31,7 @@ router.post("/", async (req, res) => {
 
         const u = await newuser.save();
         if (!u) {
-            console.log(u);
-            console.log("Error here")
-            res.json({ success: false, message: "Some error occured while creating account! try again after some time." });
+            res.json({ success: false, message: "Some error occured while creating account!" });
             return;
         }
         const token = jwt.sign({ username, email }, process.env.JWT_SECRET, { expiresIn: '1h', algorithm: "HS384" });
@@ -48,7 +42,7 @@ router.post("/", async (req, res) => {
             return;
         } else {
             await User.deleteOne({ email: email });
-            res.json({ success: false, message: "Some error occured while creating account! and sending verification email" });
+            res.json({ success: false, message: "Some error occured while creating account!" });
             return;
         }
     } catch (error) {

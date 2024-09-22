@@ -11,13 +11,13 @@ const sendMail = async ({ to_email, htmlemail, subject }: SendMailProps) => {
             port: 465,
             secure: true,
             auth: {
-                user: process.env.EMAIL,
-                pass: process.env.EMAIL_PASSWORD,
+                user: "randomhubonline@gmail.com",
+                pass: "zqhsuakdhkqdoytp",
             },
         });
 
         let mailOptions = {
-            from: process.env.EMAIL,
+            from: "randomhubonline@gmail.com",
             to: to_email,
             subject: subject,
             html: htmlemail,
