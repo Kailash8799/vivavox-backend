@@ -48,7 +48,7 @@ router.post("/", async (req, res) => {
             return;
         } else {
             await User.deleteOne({ email: email });
-            res.json({ success: false, message: "Some error occured while creating account!" });
+            res.json({ success: false, message: "Some error occured while creating account! and sending verification email" });
             return;
         }
     } catch (error) {
