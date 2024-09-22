@@ -35,6 +35,8 @@ router.post("/", async (req, res) => {
 
         const u = await newuser.save();
         if (!u) {
+            console.log(u);
+            console.log("Error here")
             res.json({ success: false, message: "Some error occured while creating account!" });
             return;
         }
