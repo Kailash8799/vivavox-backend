@@ -10,13 +10,13 @@ const sendMail = async ({ to_email, htmlemail, subject }: SendMailProps) => {
             port: 465,
             secure: true,
             auth: {
-                user: "randomhubonline@gmail.com",
-                pass: "zqhsuakdhkqdoytp",
+                user: process.env.EMAIL,
+                pass: process.env.EMAIL_PASSWORD,
             },
         });
 
         let mailOptions = {
-            from: "randomhubonline@gmail.com",
+            from: process.env.EMAIL,
             to: to_email,
             subject: subject,
             html: htmlemail,
@@ -54,10 +54,10 @@ const sendMail = async ({ to_email, htmlemail, subject }: SendMailProps) => {
         // return true;
         try {
             await transporter.sendMail(mailOptions);
-            return "";
+            return true;
         } catch (error) {
-            console.log("Error sending verification email:", error);
-            return error;
+            console.error("Error sending verification email:", error);
+            return false;
         }
 
 
