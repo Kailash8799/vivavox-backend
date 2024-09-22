@@ -6,8 +6,7 @@ const sendMail = async ({ to_email, htmlemail, subject }: SendMailProps) => {
 
     try {
         const transporter = nodemailer.createTransport({
-            service: "gmail",
-            host: "smtp.titan.email",
+            host: "smtp.gmail.com",
             port: 465,
             secure: true,
             auth: {
@@ -33,6 +32,7 @@ const sendMail = async ({ to_email, htmlemail, subject }: SendMailProps) => {
             });
         });
         if (!server) {
+            console.log("server : " + server);
             return false;
         }
 
@@ -42,6 +42,8 @@ const sendMail = async ({ to_email, htmlemail, subject }: SendMailProps) => {
                 if (info.response.includes("250")) {
                     resolve(true);
                 }
+                console.log("***")
+                console.log(err)
                 reject(err);
             });
         });
@@ -53,6 +55,7 @@ const sendMail = async ({ to_email, htmlemail, subject }: SendMailProps) => {
 
 
     } catch (error) {
+        console.log(error)
         return false;
     }
 }
