@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
         if (!u) {
             console.log(u);
             console.log("Error here")
-            res.json({ success: false, message: "Some error occured while creating account!" });
+            res.json({ success: false, message: "Some error occured while creating account! try again after some time." });
             return;
         }
         const token = jwt.sign({ username, email }, process.env.JWT_SECRET, { expiresIn: '1h', algorithm: "HS384" });
